@@ -1,0 +1,41 @@
+@echo off
+SETLOCAL
+
+REM Check if running as Administrator
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    echo Running with administrative privileges.
+) else (
+    echo This script requires administrative privileges.
+    echo Please run this script as an administrator.
+    exit /b
+)
+
+REM AE Application Paths
+SET "AEExePath23=C:\Program Files\Adobe\Adobe After Effects 2023\Support Files\afterfx.exe"
+SET "AEExePath24=C:\Program Files\Adobe\Adobe After Effects 2024\Support Files\afterfx.exe"
+SET "AEBasePath23=C:\Program Files\Adobe\Adobe After Effects 2023\Support Files\"
+SET "AEBasePath24=C:\Program Files\Adobe\Adobe After Effects 2024\Support Files\"
+SET "CEPExtPath=C:\Program Files (x86)\Common Files\Adobe\CEP\extensions"
+
+REM Source Paths
+SET "sourcePath1=%AEBasePath23%Scripts\"
+SET "sourcePath2=%AEBasePath23%Scripts\Plug-ins\"
+
+REM Destination Paths
+SET "destinationPath1=%AEBasePath24%Scripts\"
+SET "destinationPath2=%AEBasePath24%Scripts\Plug-ins\"
+
+
+IF EXIST "%AEExePath24%" (
+    ECHO Adobe After Effects 2024 is installed.
+
+    REM Copying files from Support Files. xcopy will not overwrite existing files if /d switch is used.
+    xcopy "%sourcePath1%\*" "%destinationPath1%" /s /d /y
+    xcopy "%sourcePath2%" "%destinationPath2%" /s /d /y
+
+) ELSE (
+    ECHO Adobe After Effects 2024 is not installed on this computer.
+)
+
+ENDLOCAL
